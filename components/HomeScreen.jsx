@@ -1,17 +1,23 @@
 /* eslint-disable react-native/no-inline-styles */
 import * as React from 'react';
-import {
-  View,
-  Text,
-  Image,
-  ScrollView,
-  FlatList,
-  TouchableOpacity,
-} from 'react-native';
+import {View, Text, Image, ScrollView, FlatList} from 'react-native';
 import Item from './Item';
+import {WebView} from 'react-native-webview';
+import YoutubePlayer from 'react-native-youtube-iframe';
 
 function HomeScreen({navigation}) {
   const [guidebookPosts, setGuidebookPosts] = React.useState(null);
+  const [playing, setPlaying] = React.useState(false);
+
+  const onStateChange = React.useCallback(state => {
+    if (state === 'ended') {
+      setPlaying(false);
+    }
+  }, []);
+
+  const togglePlaying = React.useCallback(() => {
+    setPlaying(prev => !prev);
+  }, []);
   React.useEffect(() => {
     fetch(
       'https://api.searchforthai.com/api/search/guidebooks?limit=20&page=1&profileId=-1&requesterId=-1&sortByOrder=desc',
@@ -70,6 +76,14 @@ function HomeScreen({navigation}) {
         keyExtractor={item => item.id}
         horizontal={true}
       />
+      <View>
+        <YoutubePlayer
+          height={300}
+          play={playing}
+          videoId={'ETlr0LGl6kA'}
+          onChangeState={onStateChange}
+        />
+      </View>
     </ScrollView>
   );
 }

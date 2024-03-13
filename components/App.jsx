@@ -1,14 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
 import * as React from 'react';
-import {
-  Button,
-  View,
-  Text,
-  Image,
-  ScrollView,
-  FlatList,
-  TouchableOpacity,
-} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from './HomeScreen';
