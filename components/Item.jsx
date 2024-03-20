@@ -5,7 +5,7 @@ import {View, Text, Image, TouchableOpacity} from 'react-native';
 const Item = ({item}) => {
   return (
     <View style={{width: 300, height: 250, margin: 20}}>
-      <TouchableOpacity style={{width: '100%', height: '100%'}}>
+      <View style={{width: '100%', height: '100%'}}>
         <Image
           style={{flex: 1, width: null, height: null}}
           source={{uri: item.details.bannerUrl}}
@@ -17,7 +17,7 @@ const Item = ({item}) => {
             {item.details.title}
           </Text>
         </View>
-      </TouchableOpacity>
+      </View>
     </View>
   );
 };

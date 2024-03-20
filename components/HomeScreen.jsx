@@ -1,6 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
 import * as React from 'react';
-import {View, Text, Image, ScrollView, FlatList} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  ScrollView,
+  FlatList,
+  TouchableOpacity,
+} from 'react-native';
 import Item from './Item';
 import {WebView} from 'react-native-webview';
 import YoutubePlayer from 'react-native-youtube-iframe';
@@ -25,13 +32,7 @@ function HomeScreen({navigation}) {
       .then(response => response.json())
       .then(data => setGuidebookPosts(data.fetchResult));
   }, []);
-  React.useEffect(() => {
-    fetch(
-      'https://api.searchforthai.com/api/search/guidebooks?limit=20&page=1&profileId=-1&requesterId=-1&sortByOrder=desc',
-    )
-      .then(response => response.json())
-      .then(data => setGuidebookPosts(data.fetchResult));
-  }, []);
+
   return (
     <ScrollView>
       <View style={{backgroundColor: 'black'}}>
@@ -48,12 +49,15 @@ function HomeScreen({navigation}) {
             marginLeft: 30,
             textAlign: 'center',
             position: 'absolute',
+            fontFamily: 'Kanit-Regular',
           }}>
           CONNECTING THAI OVERSEAS {'\n'}
           เชื่อมโยงคนไทย ในต่างแดน
         </Text>
       </View>
-      <View style={{flexDirection: 'row', alignContent: 'space-between'}}>
+      <TouchableOpacity
+        style={{flexDirection: 'row', alignContent: 'space-between'}}
+        onPress={() => navigation.navigate('Thai Guidebook')}>
         <Text
           style={{
             fontSize: 22,
@@ -61,6 +65,7 @@ function HomeScreen({navigation}) {
             marginTop: 20,
             marginLeft: 10,
             color: 'navy',
+            fontFamily: 'Kanit-Regular',
           }}
           onPress={() => navigation.navigate('Thai Guidebook')}>
           Thai Guide Book
@@ -69,14 +74,22 @@ function HomeScreen({navigation}) {
           source={require('../assets/rightArrow.png')}
           style={{height: 20, width: 20, marginTop: 23, marginLeft: 160}}
         />
-      </View>
+      </TouchableOpacity>
       <FlatList
         data={guidebookPosts}
         renderItem={({item}) => <Item item={item} />}
         keyExtractor={item => item.id}
         horizontal={true}
       />
-      <View>
+      <View
+        style={{
+          height: 5,
+          width: '100%', // Adjust the width of the divider as needed
+          backgroundColor: 'lightgray', // Change the color of the divider
+          alignSelf: 'center',
+        }}
+      />
+      <View style={{marginTop: 20}}>
         <YoutubePlayer
           height={300}
           play={playing}
