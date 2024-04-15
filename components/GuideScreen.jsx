@@ -1,22 +1,15 @@
 /* eslint-disable react-native/no-inline-styles */
-import * as React from 'react';
-import {View, Text, Button, ScrollView, Image, FlatList} from 'react-native';
+/* eslint-disable prettier/prettier */
+import React from 'react';
+import { View, Text, Button, ScrollView, Image, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
 import Item from './Item';
+import { imageThaiNow1 } from '../assets/assets';
+import {svgBasicLivingIcon, svgBusinessInvestmentIcon, svgHealthIcon, svgKidsIcon, svgLearningsIcon, svgLivingPermanentlyIcon, svgMovingToUsIcon, svgThaiPrideIcon, svgTransferIcon, svgTravelIcon} from '../assets/assets';
+import { SvgUri } from 'react-native-svg';
 
-const Category = ({title}) => (
-  <View
-    style={{
-      backgroundColor: 'grey',
-      marginTop: 20,
-      marginHorizontal: 10,
-      height: 100,
-      width: 100
-    }}>
-    <Text style={{    fontSize: 16,}}>{title}</Text>
-  </View>
-);
 
-function GuideScreen({navigation}) {
+
+function GuideScreen({ navigation }) {
   const [guidebookPosts, setGuidebookPosts] = React.useState(null);
   React.useEffect(() => {
     fetch(
@@ -27,121 +20,124 @@ function GuideScreen({navigation}) {
   }, []);
 
   const catData = [
-    {
-      id: '1',
-      title: 'Basic Living',
-    },
-    {
-      id: '2',
-      title: 'Business and Investment',
-    },
-    {
-      id: '3',
-      title: 'Health',
-    },
-    {
-      id: '4',
-      title: 'Kids',
-    },
-    {
-      id: '5',
-      title: 'Learning',
-    },
-    {
-      id: '6',
-      title: 'Living Permenantly',
-    },
-    {
-      id: '7',
-      title: 'Moving to US',
-    },
-    {
-      id: '8',
-      title: 'Thai Pride',
-    },
-    {
-      id: '9',
-      title: 'Transfer',
-    },
-    {
-      id: '10',
-      title: 'Travel',
-    },
+    { id: '1', title: 'Basic Living', icon: svgBasicLivingIcon, category: 'BASIC_LIVING'},
+    { id: '2', title: 'Business and Investment', icon: svgBusinessInvestmentIcon, category: 'BUSINESS_AND_INVESTMENT' },
+    { id: '3', title: 'Health', icon: svgHealthIcon, category: 'HEALTH' },
+    { id: '4', title: 'Kids', icon: svgKidsIcon, category: 'KIDS'},
+    { id: '5', title: 'Learning', icon: svgLearningsIcon, category: 'LEARNING' },
+    { id: '6', title: 'Living Permanently', icon: svgLivingPermanentlyIcon, category: 'LIVING_PERMANENTLY' },
+    { id: '7', title: 'Moving to US', icon: svgMovingToUsIcon, category: 'MOVING_TO_US'},
+    { id: '8', title: 'Thai Pride', icon: svgThaiPrideIcon, category: 'THAI_PRIDE' },
+    { id: '9', title: 'Transfer', icon: svgTransferIcon, category: 'TRANSFER' },
+    { id: '10', title: 'Travel', icon: svgTravelIcon, category: 'TRAVEL' },
   ];
-
+  // eslint-disable-next-line react/no-unstable-nested-components
+  const ButtonItem = ({ title, icon, category}) => (
+    <TouchableOpacity style={{marginRight: 10, marginTop: 40, backgroundColor: 'transparent', width: 100, height: 70}}
+    onPress={() => navigation.navigate('Category Screen', {category: `${category}`, otherParams: `${title}`})}>
+      <SvgUri uri={icon} />
+      <Text>{title}</Text>
+    </TouchableOpacity>
+  );
   return (
-    <ScrollView>
-      <View
-        style={{
-          backgroundColor: '#0C529C',
-          width: '100%',
-          height: 200,
-        }}>
-        <Image
-          source={require('../assets/guideScreenBg.png')}
-          style={{
-            width: 285,
-            height: 280,
-            position: 'relative',
-            top: 20,
-            left: 130,
-            backgroundColor: '#0C529C',
-          }}
-        />
-        <Text
-          style={{
-            position: 'absolute',
-            top: 150,
-            left: 20,
-            fontSize: 26,
-            color: 'white',
-            fontWeight: 'bold',
-            fontFamily: 'Kanit-Regular',
-          }}>
-          Thai Guide Book
-        </Text>
-        <View
-          style={{
-            borderTopLeftRadius: 20,
-            borderTopRightRadius: 20,
-            backgroundColor: 'white',
-            position: 'absolute',
-            width: '100%',
-            height: '130%',
-            top: 200,
-          }}>
-          <Text style={{textAlign: 'left', paddingTop: 20, paddingLeft: 10}}>
-            Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-            accusantium doloremque
-          </Text>
-          <Text
-            style={{
-              paddingTop: 40,
-              paddingLeft: 10,
-              fontSize: 24,
-              fontWeight: 'bold',
-            }}>
-            Category
-          </Text>
-          <FlatList
-            data={catData}
-            renderItem={({item}) => <Category title={item.title} />}
-            keyExtractor={item => item.id}
-            horizontal={true}
-          />
-        </View>
-        <View style={{position: 'relative', top: 200}}>
-          <Text>Guidebook</Text>
-          <FlatList
-            data={guidebookPosts}
-            renderItem={({item}) => <Item item={item} />}
-            keyExtractor={item => item.id}
-            horizontal={true}
-          />
-        </View>
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.header}>
+        <Image source={require('../assets/guideScreenBg.png')} style={styles.headerImage} />
+        <Text style={styles.headerTitle}>Thai Guide Book</Text>
       </View>
+
+      <View style={styles.categorySection}>
+        <Text style={styles.sectionTitle}>Category</Text>
+        <FlatList
+          data={catData}
+          renderItem={({item, icon, category}) => <ButtonItem title={item.title} icon={item.icon} category={item.category}/>}
+          keyExtractor={item => item.id}
+          horizontal={true}
+          contentContainerStyle={styles.categoryList}
+        />
+      </View>
+
+      <View style={styles.guidebookSection}>
+        <Text style={styles.sectionTitle}>Guide Book</Text>
+        <FlatList
+          data={guidebookPosts}
+          renderItem={({ item }) => <Item item={item} />}
+          keyExtractor={item => item.id}
+          scrollEnabled={false}
+          contentContainerStyle={styles.guidebookList}
+        />
+      </View>
+      <Image source={{url: imageThaiNow1}} />
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+  },
+  header: {
+    position: 'relative',
+    height: 250, // Adjust as needed
+    overflow: 'hidden',
+    backgroundColor: '#0C529C',
+  },
+  headerImage: {
+    flex: 1,
+    left: 100,
+    width: '75%',
+    height: '75%',
+    resizeMode: 'cover',
+  },
+  headerTitle: {
+    position: 'absolute',
+    top: 125,
+    left: 20,
+    fontSize: 26,
+    color: 'white',
+    fontWeight: 'bold',
+    fontFamily: 'Kanit-Regular',
+  },
+  sectionDescription: {
+    textAlign: 'left',
+    paddingTop: 20,
+    paddingLeft: 10,
+  },
+  sectionTitle: {
+    fontWeight: 'bold',
+    fontSize: 24,
+    marginLeft: 20,
+  },
+  categorySection: {
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    backgroundColor: 'white',
+    paddingVertical: 20,
+    marginTop: -80, // Adjust as needed
+    zIndex: 1,
+  },
+  guidebookSection: {
+    backgroundColor: 'white',
+    paddingVertical: 20,
+  },
+  categoryList: {
+    paddingLeft: 10,
+  },
+  guidebookList: {
+    paddingLeft: 10,
+  },
+  categoryContainer: {
+    backgroundColor: 'grey',
+    marginVertical: 20,
+    marginHorizontal: 10,
+    height: 100,
+    width: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  categoryTitle: {
+    fontSize: 16,
+  },
+});
 
 export default GuideScreen;
